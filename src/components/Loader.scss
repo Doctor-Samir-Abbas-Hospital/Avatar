@@ -1,0 +1,150 @@
+$primary-black: #000;
+$primary-white: #fff;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-wrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: $primary-white;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  gap: 0.4rem;
+}
+
+.loader-type {
+  color: $primary-black;
+  font-family: Inconsolata;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 0.04rem;
+  text-transform: uppercase;
+}
+
+.loader-bands {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+}
+
+.loader-target {
+  height: 2rem;
+  width: 2rem;
+  padding: 0.3rem;
+  border: 0.0625rem solid $primary-black;
+  border-left: none;
+}
+
+.loader-count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: none;
+  flex: 1;
+  height: 2rem;
+  width: 3.3rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  background: $primary-black;
+}
+
+.pulsing {
+  animation: pulse 1.1s linear infinite;
+}
+
+.marquee {
+  --gap: 0rem;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--gap);
+  border: 0.0625rem solid $primary-black;
+  height: 2rem;
+  width: 12rem;
+}
+
+.marquee__content {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  gap: var(--gap);
+  min-width: 100%;
+  animation: scroll 10s linear infinite;
+}
+
+.bande {
+  width: 100%;
+  flex: 0 0 auto;
+  align-self: center;
+}
+
+@keyframes pulse {
+  0%,
+  49.99% {
+    visibility: visible;
+  }
+  50%,
+  100% {
+    visibility: hidden;
+  }
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+.count-animation {
+  display: flex;
+  align-items: center;
+}
+
+.count {
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+  color: $primary-white;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
