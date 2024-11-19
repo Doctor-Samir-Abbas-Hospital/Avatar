@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import ChatInputWidget from "./ChatInputWidget";
 import "./Chat.css";
 
 const Chat = () => {
   const [chats, setChats] = useState([
-    { msg: "Hi there! How can I assist you today?", who: "bot", exct: "0" },
+    { msg: "Hi there! How can I assist you today?", who: "bot" },
   ]);
   const [loading, setLoading] = useState(false);
   const [isChatVisible, setIsChatVisible] = useState(true);
@@ -24,21 +25,32 @@ const Chat = () => {
     scrollToBottom();
   }, [chats, loading]);
 
-  const handleNewMessage = (data) => {
+  const handleNewMessage = async (data) => {
     if (data.text) {
+      // Add user's message to the chat
       setChats((prevChats) => [...prevChats, { msg: data.text, who: "me" }]);
-
-      // Simulate bot response
       setLoading(true);
-      setTimeout(() => {
-        const botMsg = `Here's the response to: "${data.text}"`;
-        const responseTime = (Math.random() * 2 + 1).toFixed(2);
+
+      try {
+        // Send user input to backend API
+        const response = await axios.post("http://localhost:5000/api/chat", {
+          userInput: data.text,
+        });
+
+        // Add bot's response to the chat
         setChats((prevChats) => [
           ...prevChats,
-          { msg: botMsg, who: "bot", exct: responseTime },
+          { msg: response.data.response, who: "bot" },
         ]);
+      } catch (error) {
+        console.error("Error fetching response from API:", error);
+        setChats((prevChats) => [
+          ...prevChats,
+          { msg: "Sorry, I couldn't process your request. Please try again.", who: "bot" },
+        ]);
+      } finally {
         setLoading(false);
-      }, 2000);
+      }
     }
   };
 
@@ -48,11 +60,14 @@ const Chat = () => {
 
   return (
     <div className="chat">
-      <div className={`chat-content ${isChatVisible ? "visible" : "hidden"}`} ref={chatContentRef}>
+      <div
+        className={`chat-content ${isChatVisible ? "visible" : "hidden"}`}
+        ref={chatContentRef}
+      >
         {chats.map((chat, index) => (
           <div
             key={index}
-            className={`chat-message ${chat.who} ${index === chats.length - 1 ? "new" : ""}`}
+            className={`chat-message ${chat.who}`}
           >
             {chat.who === "bot" && (
               <figure className="avatar">
@@ -64,7 +79,7 @@ const Chat = () => {
         ))}
 
         {loading && (
-          <div className="chat-message loading new">
+          <div className="chat-message loading">
             <figure className="avatar">
               <img src="https://i.ibb.co/NSVPqpZ/avatar.png" alt="avatar" />
             </figure>
@@ -83,6 +98,9 @@ const Chat = () => {
 };
 
 export default Chat;
+
+
+
 
 
 
