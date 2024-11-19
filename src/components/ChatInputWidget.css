@@ -7,10 +7,10 @@
     display: flex;
     align-items: center;
     box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
-    width: 90%;
+    width: 85%;
     position: fixed; /* Ensure it's fixed at the bottom */
     bottom: 10px;
-    left: 40%;
+    left: 45%;
     transform: translateX(-40%);
     border: none; /* Remove white border */
 }

@@ -7,14 +7,15 @@ const Chat = () => {
     { msg: "Hi there! How can I assist you today?", who: "bot", exct: "0" },
   ]);
   const [loading, setLoading] = useState(false);
+  const [isChatVisible, setIsChatVisible] = useState(true);
 
-  const chatContentRef = useRef(null); // Reference for the chat content
+  const chatContentRef = useRef(null);
 
   const scrollToBottom = () => {
     if (chatContentRef.current) {
       chatContentRef.current.scrollTo({
         top: chatContentRef.current.scrollHeight,
-        behavior: "smooth", // Enables smooth scrolling
+        behavior: "smooth",
       });
     }
   };
@@ -41,42 +42,42 @@ const Chat = () => {
     }
   };
 
+  const toggleChatVisibility = () => {
+    setIsChatVisible(!isChatVisible);
+  };
+
   return (
     <div className="chat">
-      <div className="chat-content" ref={chatContentRef}>
+      <div className={`chat-content ${isChatVisible ? "visible" : "hidden"}`} ref={chatContentRef}>
         {chats.map((chat, index) => (
           <div
             key={index}
-            className={`chat-message ${chat.who} ${
-              index === chats.length - 1 ? "new" : ""
-            }`}
+            className={`chat-message ${chat.who} ${index === chats.length - 1 ? "new" : ""}`}
           >
             {chat.who === "bot" && (
               <figure className="avatar">
-                <img
-                  src="https://i.ibb.co/NSVPqpZ/avatar.png"
-                  alt="avatar"
-                />
+                <img src="https://i.ibb.co/NSVPqpZ/avatar.png" alt="avatar" />
               </figure>
             )}
             <div className="message-text">{chat.msg}</div>
-    
           </div>
         ))}
 
         {loading && (
           <div className="chat-message loading new">
             <figure className="avatar">
-              <img
-                src="https://i.ibb.co/NSVPqpZ/avatar.png"
-                alt="avatar"
-              />
+              <img src="https://i.ibb.co/NSVPqpZ/avatar.png" alt="avatar" />
             </figure>
             <span>🫧...typing</span>
           </div>
         )}
       </div>
-      <ChatInputWidget onSendMessage={handleNewMessage} />
+      <div className="chat-footer">
+        <ChatInputWidget onSendMessage={handleNewMessage} />
+        <button className="toggle-button" onClick={toggleChatVisibility}>
+          {isChatVisible ? "˅" : "^"}
+        </button>
+      </div>
     </div>
   );
 };
