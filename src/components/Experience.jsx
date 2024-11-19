@@ -9,7 +9,7 @@ export const Experience =()=>{
             <CameraManager/>
             <Environment preset="sunset"/>
             <ambientLight intensity={0.8} color="pink"/>
-            <Avatar position={[2.5,-1.7,-0.05]} scale={1} rotation-y={-1.5}/>
+            <Avatar position={[3.5,-1.7,-0.5]} scale={1} rotation-y={-1.5}/>   
             <Gltf  src="models/classroom_default.glb" position={[0.2,-1.7,-2]}/>
         </Canvas>
         </>
@@ -18,7 +18,7 @@ export const Experience =()=>{
 const CameraManager =()=>{
     return <CameraControls
        minZoom={1}
-       maxZoom={4}
+       maxZoom={5}
        polarRotateSpeed={-0.1}
        azimuthRotateSpeed={0.1}
        mouseButtons={{

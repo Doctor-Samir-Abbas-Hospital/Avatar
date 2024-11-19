@@ -1,27 +1,57 @@
-import React, { useEffect } from 'react'
-import { useGLTF, useAnimations } from '@react-three/drei'
+import React, { useEffect,  useState } from 'react';
+import { useGLTF, useAnimations } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { MathUtils } from 'three';
+import { randInt } from 'three/src/math/MathUtils';
 
-// Male avatar
 export function Avatar(props) {
-  const { nodes, materials } = useGLTF('models/Teacher_Ali.glb')
-  const { animations } = useGLTF('models/animations.glb')
-  const { ref, actions, names } = useAnimations(animations)
+  const { nodes, materials } = useGLTF('models/Teacher_Ali.glb');
+  const { animations } = useGLTF('models/animations2.glb');
+  const { ref, actions, names } = useAnimations(animations);
+
+  const [blink, setBlink] = useState(false);
+  /* they are four animations available, idleStanding,Walking,patting and greeting */
+  useEffect(() => {
+    if (actions && names.includes('idleStanding')) {
+      actions['idleStanding'].play();
+    }
+  }, [actions, names]);
 
   useEffect(() => {
-    // Play the idleStanding animation by default
-    if (actions && names.includes('idleStanding')) {
-      actions['idleStanding'].play()
-    }
+    let blinkTimeout;
+    const nextBlink = () => {
+      blinkTimeout = setTimeout(() => {
+        setBlink(true);
+        setTimeout(() => {
+          setBlink(false);
+          nextBlink();
+        }, 200); // Blink duration
+      }, randInt(1000, 5000)); // Random interval between blinks
+    };
+    nextBlink();
+    return () => clearTimeout(blinkTimeout);
+  }, []);
 
-    // Optionally, play Handgesture animation when needed
-    // if (actions && names.includes('Handgesture')) {
-    //   actions['Handgesture'].play()
-     // Optionally, play Handgesture animation when needed
-    // if (actions && names.includes('Walking')) {
-    //   actions['Walking'].play()
-    // }
+  const lerpMorphTarget = (target, value, speed = 0.1) => {
+    Object.values(nodes).forEach((child) => {
+      if (child.isSkinnedMesh && child.morphTargetDictionary) {
+        const index = child.morphTargetDictionary[target];
+        if (index !== undefined && child.morphTargetInfluences[index] !== undefined) {
+          child.morphTargetInfluences[index] = MathUtils.lerp(
+            child.morphTargetInfluences[index],
+            value,
+            speed
+          );
+        }
+      }
+    });
+  };
 
-  }, [actions, names])
+  useFrame(() => {
+    // Adjust the morph target names if needed
+    lerpMorphTarget('eyeBlinkLeft', blink ? 1 : 0, 0.5);
+    lerpMorphTarget('eyeBlinkRight', blink ? 1 : 0, 0.5);
+  });
 
   return (
     <group ref={ref} {...props} dispose={null}>
@@ -89,9 +119,11 @@ export function Avatar(props) {
         skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
       />
     </group>
-  )
+  );
 }
 
-useGLTF.preload('models/Teacher_Ali.glb')
-useGLTF.preload('models/animations.glb')
+useGLTF.preload('models/Teacher_Ali.glb');
+useGLTF.preload('models/animations2.glb');
+
+
 
