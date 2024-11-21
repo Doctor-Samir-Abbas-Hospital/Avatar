@@ -1,4 +1,4 @@
-import { CameraControls, Environment, Gltf } from "@react-three/drei"
+import { CameraControls, Environment, Gltf, useGLTF } from "@react-three/drei"
 import { Canvas } from "@react-three/fiber"
 import { Avatar } from "./Avatar_Ali"
 
@@ -31,3 +31,4 @@ const CameraManager =()=>{
        }}
     />
 }
+useGLTF.preload('models/classroom_default.glb')

@@ -1,4 +1,4 @@
-import React, { useEffect,  useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { MathUtils } from 'three';
@@ -10,7 +10,13 @@ export function Avatar(props) {
   const { ref, actions, names } = useAnimations(animations);
 
   const [blink, setBlink] = useState(false);
-  /* they are four animations available, idleStanding,Walking,patting and greeting */
+  const [visemes, setVisemes] = useState([]);
+  const [audio, setAudio] = useState(null);
+  const audioPlayer = useRef(null);
+  const visemeIndex = useRef(0);
+  const elapsedTime = useRef(0);
+
+  /* they are four animations available, idleStanding, Walking, patting, and greeting */
   useEffect(() => {
     if (actions && names.includes('idleStanding')) {
       actions['idleStanding'].play();
@@ -47,10 +53,80 @@ export function Avatar(props) {
     });
   };
 
-  useFrame(() => {
-    // Adjust the morph target names if needed
+  const fetchSynthesizeData = async (inputText) => {
+    try {
+      const response = await fetch('http://localhost:5000/synthesize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: inputText }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const audioBlob = new Blob(
+          [Uint8Array.from(atob(data.audio), (c) => c.charCodeAt(0))],
+          { type: 'audio/wav' }
+        );
+        setAudio(audioBlob);
+        setVisemes(data.visemes);
+      } else {
+        console.error('Failed to fetch synthesis data');
+      }
+    } catch (error) {
+      console.error('Error fetching synthesis:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Example input text, replace with your own dynamic input
+    fetchSynthesizeData('Hello! How are you?');
+  }, []);
+
+  useEffect(() => {
+    if (audio) {
+      // Automatically play audio once it's available
+      const audioUrl = URL.createObjectURL(audio);
+      const player = new Audio(audioUrl);
+      audioPlayer.current = player;
+
+      visemeIndex.current = 0; // Reset viseme index
+      elapsedTime.current = 0; // Reset elapsed time
+
+      player.play();
+      player.addEventListener('ended', () => {
+        visemeIndex.current = 0;
+        elapsedTime.current = 0;
+      });
+    }
+  }, [audio]);
+
+  useFrame((_, delta) => {
+    // Blinking
     lerpMorphTarget('eyeBlinkLeft', blink ? 1 : 0, 0.5);
     lerpMorphTarget('eyeBlinkRight', blink ? 1 : 0, 0.5);
+
+    // Reset morph targets
+    Object.values(nodes).forEach((child) => {
+      if (child.isSkinnedMesh && child.morphTargetDictionary) {
+        Object.keys(child.morphTargetDictionary).forEach((key) => {
+          lerpMorphTarget(key, 0, 0.1);
+        });
+      }
+    });
+
+    // Lipsync for visemes
+    if (audioPlayer.current && visemes.length > 0) {
+      elapsedTime.current += delta * 1000; // Convert delta to milliseconds
+
+      if (visemeIndex.current < visemes.length) {
+        const [timestamp, visemeId] = visemes[visemeIndex.current];
+
+        if (elapsedTime.current >= timestamp) {
+          lerpMorphTarget(visemeId, 1, 0.2); // Apply the viseme
+          visemeIndex.current += 1; // Move to the next viseme
+        }
+      }
+    }
   });
 
   return (
@@ -124,6 +200,3 @@ export function Avatar(props) {
 
 useGLTF.preload('models/Teacher_Ali.glb');
 useGLTF.preload('models/animations2.glb');
-
-
-

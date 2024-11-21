@@ -1,29 +1,49 @@
+/* Chat Container */
 .chat {
   position: fixed;
   right: 20px;
   top: 20px;
+  overflow-y:scroll;
   bottom: 5%;
-  width: 600px;
+  width: 650px;
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(5px);
-  border: 0.02px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
+/* Chat Content (Scrollable Area) */
 .chat-content {
   flex-grow: 1;
   overflow-y: auto;
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(0px);
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   border-radius: 10px;
+  padding-bottom: 7rem; 
   transition: max-height 0.3s ease-in-out;
 }
 
+/* Chat Content Scrollbar Styling */
+.chat-content::-webkit-scrollbar {
+  width: 14px;
+}
+
+.chat-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.chat-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(120deg, #ffffff, #e6ebec);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Hidden Chat (For Toggle) */
 .hidden {
   max-height: 0%;
   overflow: hidden;
@@ -40,13 +60,20 @@
   max-height: 100%;
 }
 
+/* Chat Footer (For Input or Buttons) */
 .chat-footer {
-  background:transparent;
+  background: transparent;
+  position: sticky;
+  bottom: 0;
   padding: 0rem;
   display: flex;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.2);
   align-items: center;
+  z-index: 10;
   justify-content: space-between;
 }
+
+/* Toggle Button */
 .toggle-button {
   position: fixed;
   display: flex;
@@ -63,10 +90,10 @@
   cursor: pointer;
   box-shadow: 0 0 0 3px #00B0F0; /* Blue circle */
 }
-.toggle-button:hover{
+
+.toggle-button:hover {
   background: none;
   color: #fff;
-
 }
 
 .toggle-button::before {
@@ -79,31 +106,7 @@
   z-index: -1;
 }
 
-/* Custom scrollbar styling */
-.chat-content::-webkit-scrollbar {
-  width: 14px;
-}
-
-.chat-content::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-}
-
-.chat-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(120deg, #248a52, #257287);
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.chat-content::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(120deg, #1d7745, #205a75);
-}
-
-.chat-content {
-  scrollbar-width: thin;
-  scrollbar-color: linear-gradient(120deg, #248a52, #257287) rgba(255, 255, 255, 0.15);
-}
-
+/* Chat Messages */
 .chat-message {
   display: flex;
   align-items: center;
@@ -120,6 +123,7 @@
   justify-content: flex-end;
 }
 
+/* Chat Message Text */
 .message-text {
   max-width: 70%;
   padding: 0.8rem;
@@ -143,12 +147,14 @@
   border-radius: 10px 10px 0 10px;
 }
 
+/* Chat Timestamp */
 .chat-time {
   font-size: 0.8rem;
   color: #777;
   margin-left: 10px;
 }
 
+/* Avatar Styling */
 .avatar {
   width: 50px;
   height: 50px;
@@ -181,11 +187,13 @@
   font-size: 1.2rem;
 }
 
+/* Loading Animation */
 .loading span {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* Fade-in Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;

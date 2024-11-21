@@ -1,0 +1,12 @@
+langchain
+langchain_community
+azure-cognitiveservices-speech
+langchain_core
+langchain_openai
+python-dotenv
+flask
+flask_cors
+tiktoken
+qdrant-client
+openai
+gunicorn
