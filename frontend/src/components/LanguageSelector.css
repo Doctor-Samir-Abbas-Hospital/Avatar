@@ -1,68 +1,96 @@
-.language-selector-container {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
+body {
+  background-color: #c7ecee;
+  height: 100vh;
+}
+
+/* Positioning the dropdown menu at the top-left corner */
+.select-menu {
+  position: fixed; /* Fixed position to stay on the screen */
+  top: 20px; /* Adjust the distance from the top */
+  left: 20px; /* Adjust the distance from the left */
+  width: 300px; /* Width of the dropdown */
+  z-index: 1000; /* Ensures the dropdown appears above other elements */
+  cursor: pointer;
+}
+
+.select {
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Soft border */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+  backdrop-filter: blur(10px); /* Glass blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border-radius: 10px; /* Rounded corners */
+  padding: 15px 20px;
+  color: black;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.select:hover {
+  background: linear-gradient(145deg, #ff66b2, #eb0451);
+  box-shadow: 0 8px 20px rgba(255, 102, 178, 0.4);
+}
+
+.options-list {
+  position: absolute;
+  width: 100%;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  margin-top: 8px;
+  padding: 10px 0;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.option {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.option:hover {
+  background-color: #00a8ff;
+  color: #fff;
+}
+
+.option.selected {
+  color: #00a8ff;
+  font-weight: 600;
+}
+
+.options-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.options-list::-webkit-scrollbar-thumb {
+  background: #00a8ff;
+  border-radius: 3px;
+}
+
+.options-list::-webkit-scrollbar-track {
+  background: #eee;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .language-selector {
-    background: rgba(255, 255, 255, 0.2); /* Glassmorphic background */
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(8px); /* Blur effect */
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 12px;
-    padding: 8px 16px;
-    font-size: 14px;
-    color: #333;
-    cursor: pointer;
-    outline: none;
-    width: 200px; /* Set a width for consistent design */
-    appearance: none; /* Remove default browser styles */
-    transition: all 0.3s ease;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Dropdown menu (opened) */
-  .language-selector option {
-    background: rgba(255, 255, 255, 0.2); /* Glassmorphic dropdown options */
-    backdrop-filter: blur(10px); /* Blur effect for options */
-    -webkit-backdrop-filter: blur(10px);
-    border: none;
-    color: black;
-    font-weight: bold;
-    padding: 10px;
-    font-size: 14px;
-  }
-  
-  .language-selector option:hover {
-    background: rgba(255, 182, 193, 0.6); /* Soft rose on hover */
-    color: #fff;
-  }
-  
-  /* Hover and focus effects */
-  .language-selector:hover {
-    background: rgba(255, 255, 255, 0.4); /* Slightly lighter on hover */
-  }
-  
-  .language-selector:focus {
-    color: black;
-    font-weight: bold;
-    border: 1px solid rgba(255, 0, 102, 0.6); /* Rose border for selected */
-  }
-  
-  /* Custom scrollbar for dropdown */
-  .language-selector::-webkit-scrollbar {
-    width: 4px; /* Thin scrollbar */
-  }
-  
-  .language-selector::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.8); /* White scrollbar */
-    border-radius: 2px;
-  }
-  
-  .language-selector::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1); /* Transparent track */
-  }
+}
+
+
+
   
   
   

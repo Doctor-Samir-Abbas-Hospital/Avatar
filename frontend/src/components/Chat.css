@@ -17,7 +17,7 @@
 
 /* Chat Content Scrollbar Styling */
 .chat-content::-webkit-scrollbar {
-  width: 14px;
+  width: 10px;
 }
 
 .chat-content::-webkit-scrollbar-track {

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./LanguageSelector.css";
 
 const LanguageSelector = ({ selectedLanguage, setSelectedLanguage }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const languages = [
     { code: "en-US", name: "English (US)" },
     { code: "en-GB", name: "English (UK)" },
@@ -54,21 +56,45 @@ const LanguageSelector = ({ selectedLanguage, setSelectedLanguage }) => {
     { code: "sw-KE", name: "Swahili (Kenya)" },
     { code: "zu-ZA", name: "Zulu (South Africa)" },
     { code: "xh-ZA", name: "Xhosa (South Africa)" },
+    // Add more languages as needed
   ];
-  
+
+  const handleOptionClick = (code) => {
+    setSelectedLanguage(code);
+    setIsDropdownOpen(false);
+  };
+
   return (
-    <div className="language-selector-container">
-      <select
-        className="language-selector"
-        value={selectedLanguage}
-        onChange={(e) => setSelectedLanguage(e.target.value)}
+    <div className="select-menu">
+      <div
+        className="select"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
-        {languages.map((lang) => (
-          <option key={lang.code} value={lang.code}>
-            {lang.name}
-          </option>
-        ))}
-      </select>
+        <span>
+          {languages.find((lang) => lang.code === selectedLanguage)?.name ||
+            "Select Language"}
+        </span>
+        <i
+          className={`fas ${
+            isDropdownOpen ? "fa-angle-up" : "fa-angle-down"
+          }`}
+        ></i>
+      </div>
+      {isDropdownOpen && (
+        <div className="options-list">
+          {languages.map((lang) => (
+            <div
+              key={lang.code}
+              className={`option ${
+                selectedLanguage === lang.code ? "selected" : ""
+              }`}
+              onClick={() => handleOptionClick(lang.code)}
+            >
+              {lang.name}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
