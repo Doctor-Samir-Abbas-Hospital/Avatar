@@ -30,20 +30,24 @@ body {
 }
 
 .select:hover {
-  background: linear-gradient(145deg, #ff66b2, #eb0451);
-  box-shadow: 0 8px 20px rgba(255, 102, 178, 0.4);
+  background:#00a8ff;
+  color: #fff;
+  
 }
 
 .options-list {
   position: absolute;
   width: 100%;
-  background-color: #f9f9f9;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2); /* Glassmorphic background */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Soft border */
+  backdrop-filter: blur(10px); /* Glass blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border-radius: 10px;
   margin-top: 8px;
   padding: 10px 0;
   max-height: 200px;
   overflow-y: auto;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
   animation: fadeIn 0.3s ease-out;
 }
 
